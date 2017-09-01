@@ -3,7 +3,10 @@ var Compress = (function () {
         width:null,
         height:null,
         quality:1,
-        file:''
+        file:'',
+        success:function (blob,base64) {
+
+        }
     };
     var canvasObj,crt;
     function Compress(options) {
@@ -22,11 +25,12 @@ var Compress = (function () {
     function init() {
         createCanvas();
         setCanvasImg();
-        exportImg();
+
     }
     function createCanvas() {
        var canvas =  document.createElement('canvas');
        canvas.setAttribute('id','canvas');
+       canvas.style.display='none'
        canvas.width = 300;
         canvas.height = 300;
         document.getElementsByTagName('body')[0].appendChild(canvas);
@@ -38,26 +42,14 @@ var Compress = (function () {
         var imageObj = new Image();
 
         imageObj.onload = function() {
-            crt.drawImage(imageObj,0,0,300,300)
+            crt.drawImage(imageObj,0,0,300,300);
+            var myImageData = crt.getImageData(0, 0, 300, 300);
+            //var strDataURI = crt.toDataURL("image/jpeg");
+            console.log(myImageData);
+            var base64 = canvasObj.toDataURL('image/jpeg',0.95)
+            config.success("",base64)
         };
-        //imageObj.src =  'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg';
          imageObj.src =  window.URL.createObjectURL(config.file);
-    }
-    function exportImg() {
-        var dateUrl  = canvasObj.toBlob(function (blob) {
-            var newImg = document.createElement("img"),
-                url = URL.createObjectURL(blob);
-
-            newImg.onload = function() {
-                // no longer need to read the blob so it's revoked
-                URL.revokeObjectURL(url);
-            };
-
-            newImg.src = url;
-            document.body.appendChild(newImg);
-        },'image/jpeg',1);
-
-        //document.getElementById('img').src= dateUrl;
     }
 
 

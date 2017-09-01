@@ -5,7 +5,11 @@ document.getElementById('file').addEventListener('change',function (e) {
         width:500,
         height:500,
         quality:0.8,
-        file:files[0]
+        file:files[0],
+        success:function (blob,base64) {
+            console.log(blob,base64)
+            document.getElementById('img').src = base64
+        }
     });
     console.log(some);
 });
